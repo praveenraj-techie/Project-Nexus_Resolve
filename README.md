@@ -331,7 +331,7 @@ The dashboard build copies `data/scenarios/catalog.json` and every
 GitHub Actions publishes `apps/dashboard/dist`, so the public page can run
 Replay Mode without a backend or OpenAI key.
 
-Public replay: `https://praveenraj-techie.github.io/nexus-resolve/`
+Public replay: `https://praveenraj-techie.github.io/Project-Nexus_Resolve/`
 
 Public replay intentionally does not prove a live OpenAI call. For judging,
 show the local live dashboard/deep-dive flow after setting `OPENAI_API_KEY` in

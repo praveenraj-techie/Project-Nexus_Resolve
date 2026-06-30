@@ -47,9 +47,9 @@
 - Docs package exists.
 - CI and Pages workflow files exist.
 - Public GitHub repository exists at
-  `https://github.com/praveenraj-techie/nexus-resolve`.
+  `https://github.com/praveenraj-techie/Project-Nexus_Resolve`.
 - Public GitHub Pages replay is configured at
-  `https://praveenraj-techie.github.io/nexus-resolve/`.
+  `https://praveenraj-techie.github.io/Project-Nexus_Resolve/`.
 - Secret scan found no `.env`, API keys, or email matches.
 - Local captioned demo video exists at `media/nexus-resolve-demo.mp4`.
 - Video metadata was verified at 270 seconds, or 4:30.

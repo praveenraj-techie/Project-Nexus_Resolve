@@ -17,7 +17,7 @@ If `gh` is unavailable, create a public repository named `nexus-resolve` in the
 GitHub UI, then run:
 
 ```powershell
-git remote add origin https://github.com/<your-user>/nexus-resolve.git
+git remote add origin https://github.com/<your-user>/Project-Nexus_Resolve.git
 git checkout main
 git push -u origin main
 ```

@@ -2,7 +2,7 @@ import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  base: process.env.GITHUB_PAGES === 'true' ? '/nexus-resolve/' : '/',
+  base: process.env.GITHUB_PAGES === 'true' ? '/Project-Nexus_Resolve/' : '/',
   plugins: [react()],
   server: {
     port: 5173,
