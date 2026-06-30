@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEXUS Local SNOW Desk</title>
+    <link rel="stylesheet" href="./styles.css?v=local-snow-20260628" />
+  </head>
+  <body>
+    <main class="snow-shell">
+      <aside class="side-nav" aria-label="Local SNOW navigation">
+        <div class="side-brand">
+          <span class="brand-mark" aria-hidden="true">N</span>
+          <div>
+            <strong>Local SNOW</strong>
+            <small>NEXUS ITSM Desk</small>
+          </div>
+        </div>
+        <nav>
+          <a href="#incident-form" class="active">Incident</a>
+          <a href="#related-records">Problems</a>
+          <a href="#related-records">Changes</a>
+          <a href="#related-records">Requests</a>
+          <a href="#cmdb-panel">CMDB / CI</a>
+          <a href="#comms-panel">Major Comms</a>
+          <a href="#activity-panel">Activity</a>
+        </nav>
+        <section class="run-list-panel" aria-label="Active NEXUS runs">
+          <div class="mini-head">
+            <strong>Active Runs</strong>
+            <button type="button" data-action="refresh">Refresh</button>
+          </div>
+          <div id="run-list" class="run-list"></div>
+        </section>
+      </aside>
+
+      <section class="desk-main">
+        <header class="snow-topbar">
+          <div>
+            <span class="crumbs">All &gt; Incidents &gt; NEXUS Local Mirror</span>
+            <h1 id="page-title">Waiting for a NEXUS incident</h1>
+          </div>
+          <div class="mirror-state">
+            <span id="ws-state" class="status-pill neutral">Connecting</span>
+            <span class="status-pill safe">Synthetic only</span>
+            <a id="dashboard-link" href="http://localhost:5173/#/incident/disk-space" target="_blank" rel="noreferrer">Dashboard</a>
+          </div>
+        </header>
+
+        <section class="empty-state" id="empty-state">
+          <div>
+            <span class="eyebrow">Local source of record</span>
+            <h2>No active run is attached yet.</h2>
+            <p>
+              Start a NEXUS live run from the dashboard, or open one here. This local desk will
+              mirror incidents, work notes, related records, CMDB context, comms approvals, and
+              audit activity with no external ServiceNow side effects.
+            </p>
+          </div>
+          <div class="start-grid">
+            <button type="button" data-start-scenario="disk-space">Start P4 Disk Incident</button>
+            <button type="button" data-start-scenario="command-centre-alert-storm">Start P2 Major Incident</button>
+          </div>
+        </section>
+
+        <section class="record-toolbar" id="record-toolbar" aria-label="Record controls">
+          <div class="record-tabs" id="record-tabs"></div>
+          <div class="action-row">
+            <button type="button" data-action="approve-run">Approve Remediation</button>
+            <button type="button" data-action="observe-run">Observe</button>
+            <button type="button" data-action="close-run" class="primary">Close Incident</button>
+          </div>
+        </section>
+
+        <section class="summary-strip" id="summary-strip" aria-label="ITSM summary"></section>
+
+        <div class="desk-grid">
+          <section class="form-panel" id="incident-form" aria-label="Incident form">
+            <div class="panel-head">
+              <div>
+                <span class="eyebrow">Incident form</span>
+                <h2 id="record-heading">Primary incident</h2>
+              </div>
+              <span id="record-state" class="state-chip">New</span>
+            </div>
+            <dl class="field-grid" id="field-grid"></dl>
+            <div class="description-box">
+              <span>Description</span>
+              <p id="record-description">Waiting for run state.</p>
+            </div>
+          </section>
+
+          <aside class="cmdb-panel" id="cmdb-panel" aria-label="CMDB and CI site">
+            <div class="panel-head">
+              <div>
+                <span class="eyebrow">CMDB context</span>
+                <h2>CI / Site / Service</h2>
+              </div>
+            </div>
+            <dl class="cmdb-grid" id="cmdb-grid"></dl>
+            <div class="metric-box" id="metric-box"></div>
+          </aside>
+        </div>
+
+        <div class="desk-grid lower">
+          <section class="activity-panel" id="activity-panel" aria-label="Work notes and activity">
+            <div class="panel-head">
+              <div>
+                <span class="eyebrow">Work notes</span>
+                <h2 id="work-note-title">Activity stream</h2>
+              </div>
+              <span id="work-note-count" class="count-pill">0 notes</span>
+            </div>
+            <div id="work-notes" class="work-notes"></div>
+          </section>
+
+          <aside class="event-panel" aria-label="NEXUS event stream">
+            <div class="panel-head">
+              <div>
+                <span class="eyebrow">Real-time feed</span>
+                <h2>NEXUS actions</h2>
+              </div>
+              <span id="event-count" class="count-pill">0 events</span>
+            </div>
+            <div id="event-stream" class="event-stream"></div>
+          </aside>
+        </div>
+
+        <div class="desk-grid lower">
+          <section class="related-panel" id="related-records" aria-label="Related ITSM records">
+            <div class="panel-head">
+              <div>
+                <span class="eyebrow">Related records</span>
+                <h2>Incident, Problem, RITM, Change</h2>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Number</th>
+                    <th>Type</th>
+                    <th>State</th>
+                    <th>Assignment group</th>
+                    <th>Linked records</th>
+                  </tr>
+                </thead>
+                <tbody id="related-table"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <aside class="comms-panel" id="comms-panel" aria-label="Communication approvals">
+            <div class="panel-head">
+              <div>
+                <span class="eyebrow">Manual approval</span>
+                <h2>Teams / ISINFO / IVR</h2>
+              </div>
+            </div>
+            <div id="comms-list" class="comms-list"></div>
+          </aside>
+        </div>
+      </section>
+    </main>
+    <script defer src="./app.js?v=local-snow-20260628"></script>
+  </body>
+</html>

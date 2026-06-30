@@ -1,0 +1,17 @@
+.env
+.env.*
+!.env.example
+.agents/
+.codex/
+node_modules/
+dist/
+.venv/
+*.egg-info/
+__pycache__/
+.pytest_cache/
+.coverage
+*.log
+data/generated/
+apps/dashboard/public/data/
+apps/dashboard/test-results/
+apps/dashboard/playwright-report/

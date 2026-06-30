@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEXUS-RESOLVE Judge Console</title>
+    <link rel="stylesheet" href="./styles.css?v=deepdive-liveapi-proof-20260627" />
+  </head>
+  <body>
+    <main class="judge-shell">
+      <header class="topbar">
+        <div class="brand-lockup">
+          <span class="brand-mark" aria-hidden="true">N</span>
+          <div>
+            <strong>NEXUS-RESOLVE</strong>
+            <small>Judge Console</small>
+          </div>
+        </div>
+        <div class="topbar-status">
+          <span class="status-chip safe">Synthetic only</span>
+          <span class="status-chip neutral">Port 5174</span>
+          <a id="topbar-dashboard-link" href="http://localhost:5173/#/incident/disk-space" target="_blank" rel="noreferrer">Open real dashboard</a>
+        </div>
+      </header>
+
+      <section class="chooser" aria-labelledby="chooser-title">
+        <div class="chooser-copy">
+          <p class="eyebrow">Judge view selector</p>
+          <h1 id="chooser-title">What do you want to inspect?</h1>
+          <p>
+            Pick one path. Frontend now shows the real dashboard running on port 5173. Backend
+            shows live FastAPI JSON when available, plus a labeled backend trace replay that
+            explains the same frontend evidence.
+          </p>
+        </div>
+        <div class="mode-grid" role="tablist" aria-label="Judge view mode">
+          <button class="mode-card" type="button" data-mode="frontend" role="tab">
+            <span class="mode-icon frontend-icon" aria-hidden="true"></span>
+            <strong>Frontend Only</strong>
+            <small>Embedded real dashboard route, not a separate mock screen.</small>
+          </button>
+          <button class="mode-card" type="button" data-mode="backend" role="tab">
+            <span class="mode-icon backend-icon" aria-hidden="true"></span>
+            <strong>Backend Only</strong>
+            <small>Live API JSON, WebSocket events, trace replay, policy and RCA.</small>
+          </button>
+          <button class="mode-card" type="button" data-mode="both" role="tab">
+            <span class="mode-icon both-icon" aria-hidden="true"></span>
+            <strong>Both Screens</strong>
+            <small>Real dashboard beside live API evidence and backend trace replay.</small>
+          </button>
+        </div>
+      </section>
+
+      <section class="mode-panel is-active" id="landing-panel" aria-label="Initial instruction">
+        <div class="landing-card">
+          <div>
+            <p class="eyebrow">Start here</p>
+            <h2>Choose a judging lens above.</h2>
+            <p>
+              The page will then show only what that audience asked for. No API key is needed in
+              this browser page. Live OpenAI calls, when enabled, stay inside the local backend
+              process.
+            </p>
+          </div>
+          <div class="landing-steps">
+            <article>
+              <span>1</span>
+              <strong>Frontend</strong>
+              <p>Use this when judges care about the user journey and presentation.</p>
+            </article>
+            <article>
+              <span>2</span>
+              <strong>Backend</strong>
+              <p>Use this when judges ask how the agent decides and stays governed.</p>
+            </article>
+            <article>
+              <span>3</span>
+              <strong>Both</strong>
+              <p>Use this for the strongest explanation during a live Q and A.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="mode-panel" id="frontend-panel" aria-labelledby="frontend-title">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Real frontend dashboard</p>
+            <h2 id="frontend-title">Actual React console from port 5173.</h2>
+          </div>
+          <div class="action-row">
+            <button class="secondary-action" type="button" data-reset="frontend">Refresh frame</button>
+            <a class="primary-action" id="frontend-open-route" href="http://localhost:5173/#/incident/disk-space" target="_blank" rel="noreferrer">Open full dashboard</a>
+          </div>
+        </div>
+
+        <div class="real-frontend-layout">
+          <aside class="frontend-router" aria-label="Frontend route binding">
+            <div class="panel-title">
+              <strong>Scenario route</strong>
+              <span id="frontend-alert-count">11 routes</span>
+            </div>
+            <div class="route-card">
+              <span class="step-label">Real URL</span>
+              <strong id="frontend-dashboard-route">http://localhost:5173/#/incident/disk-space</strong>
+              <p>
+                This frame is the actual dashboard app. Use Live inside it for OpenAI-backed local
+                runs, or Replay for static judge-safe playback.
+              </p>
+            </div>
+            <div class="team-tabs" id="team-tabs"></div>
+            <div class="alert-list" id="alert-list"></div>
+          </aside>
+
+          <section class="dashboard-frame-card" aria-label="Real frontend dashboard">
+            <div class="frame-toolbar">
+              <div>
+                <span class="status-pill success">Real app</span>
+                <strong id="frontend-frame-title">Dashboard incident route</strong>
+              </div>
+              <span id="frontend-run-status">Frame ready</span>
+            </div>
+            <iframe
+              id="frontend-dashboard-frame"
+              class="dashboard-frame"
+              title="NEXUS-RESOLVE dashboard incident workspace"
+              src="http://localhost:5173/#/incident/disk-space"
+            ></iframe>
+          </section>
+        </div>
+      </section>
+
+      <section class="mode-panel" id="backend-panel" aria-labelledby="backend-title">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Backend and API evidence</p>
+            <h2 id="backend-title">Every backend object behind the frontend.</h2>
+          </div>
+          <div class="action-row">
+            <button class="secondary-action" type="button" data-reset="backend">Reset</button>
+            <button class="primary-action" type="button" data-start="backend">Start API + CLI trace</button>
+          </div>
+        </div>
+
+        <div class="backend-layout">
+          <section class="terminal-card" aria-label="Backend terminal">
+            <div class="terminal-top">
+              <span></span><span></span><span></span>
+              <strong>backend: trace replay + live API evidence</strong>
+            </div>
+            <div class="terminal-output" id="backend-terminal"></div>
+            <div class="terminal-actions">
+              <button class="approve-action" type="button" data-approve="backend" disabled>Approve at human gate</button>
+            </div>
+          </section>
+
+          <aside class="backend-inspector" aria-label="Backend decision evidence">
+            <div class="inspector-card">
+              <span class="step-label">0. API health</span>
+              <strong id="api-health-title">FastAPI status</strong>
+              <p id="api-health-packet">Checking http://127.0.0.1:8000/api/health.</p>
+            </div>
+            <div class="inspector-card">
+              <span class="step-label">1. Data</span>
+              <strong>Scenario packet</strong>
+              <p id="data-packet">Waiting for selected incident.</p>
+            </div>
+            <div class="inspector-card">
+              <span class="step-label">2. Compare</span>
+              <strong>SOP + history</strong>
+              <p id="compare-packet">Five synthetic history tickets are compared after SOP lookup.</p>
+            </div>
+            <div class="inspector-card">
+              <span class="step-label">3. Decide</span>
+              <strong>OpenAI structured output</strong>
+              <p id="openai-packet">Evidence summary and remediation plan are validated as typed JSON.</p>
+            </div>
+            <div class="inspector-card">
+              <span class="step-label">4. Govern</span>
+              <strong>Policy + human approval</strong>
+              <p id="policy-packet">Execution is blocked until approval and mock-only policy checks pass.</p>
+            </div>
+          </aside>
+        </div>
+
+        <section class="api-board" aria-label="Backend API request and response evidence">
+          <div class="api-board-head">
+            <div>
+              <p class="eyebrow">API contract shown to judges</p>
+              <h3>Request, response, stream event, and frontend binding.</h3>
+            </div>
+            <span id="api-board-status">Ready</span>
+          </div>
+          <div class="api-grid" id="api-response-board"></div>
+        </section>
+      </section>
+
+      <section class="mode-panel" id="both-panel" aria-labelledby="both-title">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Split-screen simulation</p>
+            <h2 id="both-title">Frontend and backend moving together.</h2>
+          </div>
+          <div class="action-row">
+            <button class="secondary-action" type="button" data-reset="both">Reset</button>
+            <button class="primary-action" type="button" data-start="both">Start both screens</button>
+          </div>
+        </div>
+
+        <div class="split-layout">
+          <section class="split-pane frontend-pane">
+            <div class="split-title">
+              <strong>Frontend: real dashboard</strong>
+              <span id="both-front-status">Ready</span>
+            </div>
+            <iframe
+              id="both-dashboard-frame"
+              class="dashboard-frame compact-frame"
+              title="Real dashboard beside backend trace"
+              src="http://localhost:5173/#/incident/disk-space"
+            ></iframe>
+            <div class="mini-metrics">
+              <article class="red-state">
+                <span>Before</span>
+                <strong id="both-before">147 duplicates</strong>
+              </article>
+              <article class="green-state">
+                <span>After</span>
+                <strong id="both-after">Pending</strong>
+              </article>
+            </div>
+            <div class="timeline-stream compact" id="both-frontend-timeline"></div>
+            <button class="approve-action full" type="button" data-approve="both" disabled>Approve synced mock action</button>
+          </section>
+
+          <section class="split-pane backend-pane">
+            <div class="split-title">
+              <strong>Backend: API + CLI</strong>
+              <span id="both-back-status">Ready</span>
+            </div>
+            <div class="terminal-output compact" id="both-terminal"></div>
+            <div class="api-mini-stack" id="both-api-stack"></div>
+            <div class="decision-stack" id="both-decision-stack"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+    <script defer src="./app.js?v=deepdive-liveapi-proof-20260627"></script>
+  </body>
+</html>

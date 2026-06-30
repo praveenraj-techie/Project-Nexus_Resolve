@@ -1,0 +1,23 @@
+{
+  "snapshot_id": "fleet-after-disk-remediation",
+  "ci": "APP-WIN-042",
+  "business_service": "Internal Claims Portal",
+  "drives": {
+    "C:": {
+      "total_gb": 200,
+      "used_gb": 156,
+      "free_gb": 44,
+      "used_percent": 78
+    }
+  },
+  "cleanup_result": {
+    "path": "C:\\App\\Logs",
+    "reclaimed_gb": 36,
+    "old_log_gb_removed": 24,
+    "additional_compressed_archive_gb_removed": 12,
+    "active_logs_removed": false,
+    "protected_paths_touched": false,
+    "mock_only": true
+  }
+}
+

@@ -1,0 +1,30 @@
+{
+  "snapshot_id": "fleet-before-disk-remediation",
+  "ci": "APP-WIN-042",
+  "business_service": "Internal Claims Portal",
+  "drives": {
+    "C:": {
+      "total_gb": 200,
+      "used_gb": 192,
+      "free_gb": 8,
+      "used_percent": 96
+    }
+  },
+  "cleanup_candidates": [
+    {
+      "path": "C:\\App\\Logs",
+      "description": "Application log files older than 7 days",
+      "old_log_gb": 24,
+      "active_log_gb": 4,
+      "age_filter_days": 7,
+      "safe_to_remove": true
+    }
+  ],
+  "protected_paths": [
+    "C:\\Windows",
+    "C:\\Windows\\System32",
+    "C:\\Program Files",
+    "C:\\Users"
+  ]
+}
+

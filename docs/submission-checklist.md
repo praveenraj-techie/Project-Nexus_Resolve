@@ -1,0 +1,32 @@
+# Submission Checklist
+
+- [x] Public GitHub repository exists as `nexus-resolve`.
+- [x] GitHub Pages source is configured as GitHub Actions.
+- [x] Public Pages URL opens Replay Mode.
+- [x] Local backend starts on port 8000.
+- [x] Dashboard starts on port 5173.
+- [x] Deep-dive judge console starts on port 5174.
+- [x] Replay mode loads without backend.
+- [x] Local live mode works with `OPENAI_API_KEY`.
+- [x] Mock fallback works without `OPENAI_API_KEY`.
+- [x] SOP evidence is visible.
+- [x] Unsafe precedent is visible and flagged.
+- [x] Protected-path policy block is demonstrable.
+- [x] Human approval is required before mock remediation.
+- [x] Approval metadata is captured in local live mode.
+- [x] Hashed audit packet endpoint is available for active runs.
+- [x] Downloadable PDF audit report endpoint is available for active runs.
+- [x] AI token/cost/latency telemetry is visible in the proof strip and impact dashboard.
+- [x] Dedicated impact dashboard compares portfolio MTTR and $30/hour human cost.
+- [x] Endpoint Security exception scenario proves safe rejection/no execution.
+- [x] ServiceNow-style synthetic connector endpoint is available.
+- [x] No destructive command is executed.
+- [x] Before and after metrics are visible.
+- [x] RCA is generated.
+- [x] Backend tests pass.
+- [x] Dashboard tests and build pass.
+- [x] Playwright browser E2E suite passes.
+- [x] Browser smoke verified dashboard live proof, policy block, deep-dive live API cards, and audit hash.
+- [x] Secret scan finds no tracked real `.env`, API-key-like values, email-like values, or customer data.
+- [x] Demo video is 3-5 minutes. Local artifact: `media/nexus-resolve-demo.mp4`.
+- [x] README explains OpenAI stack, Codex usage, safety model, and roadmap.

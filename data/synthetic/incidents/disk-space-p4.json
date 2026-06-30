@@ -1,0 +1,22 @@
+{
+  "incident_id": "INC-2026-00421",
+  "priority": "P4",
+  "title": "C drive above disk utilization threshold on APP-WIN-042",
+  "business_service": "Internal Claims Portal",
+  "affected_ci": "APP-WIN-042",
+  "environment": "synthetic",
+  "symptoms": [
+    "C drive utilization is 96%",
+    "Available free space is 8 GB",
+    "Application health checks are still passing",
+    "Alert has repeated three times in the last hour"
+  ],
+  "metric_snapshot": {
+    "drive": "C:",
+    "used_percent": 96,
+    "free_gb": 8,
+    "total_gb": 200
+  },
+  "requested_outcome": "Safely reclaim disk space without touching protected system or user paths."
+}
+
