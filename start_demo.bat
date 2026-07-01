@@ -16,6 +16,7 @@ exit /b 0
 set "ROOT=%~dp0"
 set "PRODUCT=!ROOT!"
 set "DEFAULT_OPENAI_API_KEY="
+call :load_default_openai_key
 
 cd /d "!ROOT!" || exit /b 1
 
@@ -28,8 +29,10 @@ if /I "%~1"=="--dry-run" (
   echo   2. Use with OpenAI Key online demo
   echo   3. Use with OpenAI + Production integrated ServiceNow ITSM tool
   echo OpenAI key menu:
-  echo   1. Use built-in default OpenAI API key
+  echo   1. Use local default OpenAI API key
   echo   2. Paste my own key for this run
+  echo Default key sources:
+  echo   OPENAI_API_KEY, NEXUS_DEFAULT_OPENAI_API_KEY, .env.local, .env
   exit /b 0
 )
 
@@ -64,6 +67,7 @@ echo.
 echo   2. Use with OpenAI Key online demo
 echo      Note: proves real OpenAI API usage, then opens demo SNOW/local tabs.
 echo      No production ITSM tool is required.
+echo      First verification can take a little time while setup and API proof run.
 echo.
 echo   3. Use with OpenAI + Production integrated ServiceNow ITSM tool
 echo      Note: requires your ServiceNow Developer/PDI instance URL,
@@ -101,6 +105,11 @@ echo ============================================================
 echo This proves real OpenAI API usage first.
 echo Then it opens the safe demo SNOW/local judge stack.
 echo Real ServiceNow is not required for this mode.
+echo.
+echo Timing note:
+echo   - First run may install local dependencies before the demo opens.
+echo   - OpenAI verification uses a real API call and may take 30-90 seconds.
+echo   - Keep this window open. The browser tabs open after proof passes.
 echo.
 call :choose_openai_key
 if errorlevel 1 goto failed
@@ -152,10 +161,20 @@ exit /b 0
 
 :choose_openai_key
 if not defined OPENAI_MODEL set "OPENAI_MODEL=gpt-5.5"
+call :load_default_openai_key
+if defined DEFAULT_OPENAI_API_KEY (
+  echo Local default OpenAI API key detected. Using it for this run.
+  set "OPENAI_API_KEY=!DEFAULT_OPENAI_API_KEY!"
+  exit /b 0
+)
 echo Choose OpenAI API key source:
 echo.
-echo   1. Use built-in default OpenAI API key
+echo   1. Use local default OpenAI API key
 echo   2. Paste my own key for this run ^(hidden input^)
+echo.
+echo Key safety: pasted keys are used only in this launcher session.
+echo The key is not written to Git, docs, screenshots, or project files.
+echo Local default key sources are ignored by Git: .env.local or .env.
 echo.
 choice /C 12 /N /M "Select option [1/2]: "
 set "KEY_CHOICE=%errorlevel%"
@@ -173,6 +192,7 @@ if "%KEY_CHOICE%"=="1" (
 if "%KEY_CHOICE%"=="2" (
   call :read_hidden_key
   if errorlevel 1 exit /b 1
+  echo OpenAI API key captured for this run only.
   exit /b 0
 )
 exit /b 1
@@ -195,9 +215,22 @@ if exist "!PRODUCT!\services\backend\.venv\Scripts\python.exe" (
     exit /b 0
   )
 )
-echo First run detected. Installing local project dependencies now.
-echo This creates services\backend\.venv and apps\dashboard\node_modules.
-echo It can take a few minutes on a new machine.
+echo First-time setup detected.
+echo.
+echo What is happening now:
+echo   - Creating the Python backend virtual environment.
+echo   - Installing backend packages.
+echo   - Installing dashboard Node packages.
+echo.
+echo Expected time:
+echo   - Usually 2-5 minutes on a new machine.
+echo   - It may take longer on slow internet or first npm/Python cache setup.
+echo.
+echo Requirements:
+echo   - Internet access is needed only for dependency download.
+echo   - Python 3.11+ and Node.js 20+ must be installed.
+echo.
+echo This setup runs only once. Please keep this window open.
 echo.
 if not exist "!PRODUCT!\scripts\setup-all.cmd" (
   echo ERROR: setup-all.cmd was not found under:
@@ -223,6 +256,9 @@ exit /b 0
 :verify_openai
 echo.
 echo Verifying real OpenAI workflow...
+echo This step makes a live OpenAI API proof call.
+echo It may take 30-90 seconds depending on network and API response time.
+echo Do not close this window while verification is running.
 cd /d "!PRODUCT!" || exit /b 1
 call "!PRODUCT!\scripts\verify-live-openai.cmd"
 if errorlevel 1 (
@@ -255,6 +291,8 @@ exit /b 0
 :start_offline_stack
 echo.
 echo Starting NEXUS-RESOLVE demo SNOW/local stack...
+echo This starts the backend, dashboard, Local SNOW, and deep-dive hosts.
+echo If this is the first launch after setup, startup can take 30-60 seconds.
 cd /d "!PRODUCT!" || exit /b 1
 call "!PRODUCT!\scripts\start-demo.cmd"
 if errorlevel 1 (
@@ -298,3 +336,29 @@ echo.
 echo Demo launcher stopped because a required step failed.
 pause
 exit /b 1
+
+:load_default_openai_key
+if defined OPENAI_API_KEY (
+  set "DEFAULT_OPENAI_API_KEY=!OPENAI_API_KEY!"
+  exit /b 0
+)
+if defined NEXUS_DEFAULT_OPENAI_API_KEY (
+  set "DEFAULT_OPENAI_API_KEY=!NEXUS_DEFAULT_OPENAI_API_KEY!"
+  exit /b 0
+)
+if not defined DEFAULT_OPENAI_API_KEY call :load_openai_key_from_file "!PRODUCT!.env.local"
+if not defined DEFAULT_OPENAI_API_KEY call :load_openai_key_from_file "!PRODUCT!.env"
+exit /b 0
+
+:load_openai_key_from_file
+set "NEXUS_KEY_FILE=%~1"
+if not exist "!NEXUS_KEY_FILE!" exit /b 0
+for /f "usebackq tokens=1,* delims==" %%A in ("!NEXUS_KEY_FILE!") do (
+  set "NEXUS_ENV_KEY=%%A"
+  set "NEXUS_ENV_VALUE=%%B"
+  if /I "!NEXUS_ENV_KEY!"=="OPENAI_API_KEY" (
+    set "DEFAULT_OPENAI_API_KEY=!NEXUS_ENV_VALUE!"
+    exit /b 0
+  )
+)
+exit /b 0
